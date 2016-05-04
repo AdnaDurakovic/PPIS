@@ -83,7 +83,8 @@
 
   $db = InitBase();
 
-  $statement = $db->prepare("SELECT DobavljacID,Naziv,Telefon,Email,Adresa,TekuciRacun FROM dobavljac");
+  $statement = $db->prepare("SELECT a.DobavljacID, a.Naziv, a.Telefon, a.Email, a.Adresa, a.TekuciRacun, b.Path FROM dobavljac a,
+  ugovor b WHERE a.DobavljacID = b.DobavljacID");
   $statement->execute();
  ?>
 <div id="demo">
@@ -103,6 +104,7 @@
           <th>Email</th>
           <th>Adresa</th>
           <th>Tekuci racun</th>
+          <th>Ugovor</th>
         </tr>
       </thead>
       <tbody>
@@ -113,10 +115,11 @@
               <tr>
                 <td data-title="ID"><?php echo $u["DobavljacID"]?></td>
                 <td data-title="Naziv"><?php echo $u["Naziv"]?></td>
-                <td data-title="Opis"><?php echo $u["Telefon"]?></td>
-                <td data-title="Kolicina"><?php echo $u["Email"]?></td>
-                <td data-title="Kolicina"><?php echo $u["Adresa"]?></td>
-                <td data-title="Kolicina"><?php echo $u["TekuciRacun"]?></td>
+                <td data-title="Telefon"><?php echo $u["Telefon"]?></td>
+                <td data-title="Email"><?php echo $u["Email"]?></td>
+                <td data-title="Adresa"><?php echo $u["Adresa"]?></td>
+                <td data-title="TekuciRacun"><?php echo $u["TekuciRacun"]?></td>
+                <td data-title="Ugovor"><a href='<?php echo $u["Path"]?>'>ugovor</a></td>
               </tr>
         <?php
           }
