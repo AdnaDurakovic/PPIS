@@ -41,7 +41,7 @@
                       <a href="managerStats.php">Stats</a>
                   </li>
                   <li>
-                      <a href="managerSuppliers.php">Stats</a>
+                      <a href="managerSuppliers.php">Suppliers</a>
                   </li>
 <!--
                   <li>

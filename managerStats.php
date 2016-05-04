@@ -83,6 +83,9 @@
                   <li>
                       <a href="managerStats.php">Stats</a>
                   </li>
+                  <li>
+                      <a href="managerSuppliers.php">Suppliers</a>
+                  </li>
 
                     <?php session_start(); ?>
 
