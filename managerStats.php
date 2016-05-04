@@ -158,7 +158,9 @@
             $prosli = $allProductData[date('n')-2];
             $razlika = $trenutni - $prosli;
             if ($razlika < 0) {
-              $proc = $trenutni/100;
+              if ($trenutni == 0) { $proc = 0.00000000000001;}
+				      else { $proc = $trenutni/100; }
+
               $proc_razlika = ((-1)*$razlika/$proc)/2;
               $naredni = $trenutni - ($proc_razlika/100)*$trenutni;
             }

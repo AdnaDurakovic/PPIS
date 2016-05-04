@@ -40,6 +40,9 @@
                   <li>
                       <a href="managerStats.php">Stats</a>
                   </li>
+                  <li>
+                      <a href="managerSuppliers.php">Stats</a>
+                  </li>
 <!--
                   <li>
                       <div class="dummy"></div>
