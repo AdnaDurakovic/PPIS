@@ -90,7 +90,7 @@ if (isset ($_REQUEST["kupovina"]))
                         <a href="#">About</a>
                     </li>
                     <li>
-                        <a href="shop.html">Shop</a>
+                        <a href="shop.php">Shop</a>
                     </li>
                     <li>
                         <a href="#">Contact</a>
@@ -99,7 +99,7 @@ if (isset ($_REQUEST["kupovina"]))
                         <div class="dummy"></div>
                     </li>
                     <li>
-                        <button type="button" class="buttonBluee"> <a href="login.html">Login</a>
+                        <button type="button" class="buttonBluee"> <a href="login.php">Login</a>
                         </button>
                     </li>
                 </ul>

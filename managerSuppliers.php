@@ -88,7 +88,7 @@
   $statement->execute();
  ?>
 <div id="demo">
-  <h1>Spisak dobavljača</h1>
+  <h1>Spisak dobavljača (<a href="addSupplier.php">Dodaj</a>)</h1>
   <br>
 
   <!-- Responsive table starts here -->

@@ -56,5 +56,30 @@ $(window, document, undefined).ready(function() {
 
     e.preventDefault(); // avoid to execute the actual submit of the form.
   });
+  $("#frm_dodavanje_").submit(function(e) {
+    var data = new FormData(jQuery('#frm_dodavanje')[0]);
+    k.append ("ugovor", jQuery('#frm_dodavanje')[0].files[0]);
+    $.ajax({
+      type: "POST",
+      url: "addSupplier.php",
+      processData: false,
+      data: data,
+      success: function(data)
+      {
+        alert (data);
+        data = JSON.parse(data);
+        if (data.status == "OK")
+          $("#MsgCnt").html("<h4>Dobavljač uspješno dodan!</h4><br><h5><a href='../managerSuppliers.php'>Nazad</a> </h5>");
+        else
+          $("#MsgCnt").html("<h4>" + data.message + "</h4>");
+
+        $("#MsgOK").modal('show');
+
+      }
+    });
+
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+  });
 });
 
