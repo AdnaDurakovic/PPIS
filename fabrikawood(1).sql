@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 24, 2016 at 02:28 PM
+-- Generation Time: May 05, 2016 at 02:10 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -34,15 +34,17 @@ CREATE TABLE IF NOT EXISTS `dobavljac` (
   `Adresa` varchar(100) COLLATE utf8_slovenian_ci NOT NULL,
   `TekuciRacun` varchar(100) COLLATE utf8_slovenian_ci NOT NULL,
   `Opis` text COLLATE utf8_slovenian_ci NOT NULL,
+  `Ocjena` decimal(10,0) NOT NULL,
   PRIMARY KEY (`DobavljacID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_slovenian_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_slovenian_ci AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `dobavljac`
 --
 
-INSERT INTO `dobavljac` (`DobavljacID`, `Naziv`, `Telefon`, `Email`, `Adresa`, `TekuciRacun`, `Opis`) VALUES
-(1, 'Woody', '030111111', 'woody@woody.net', '120 City Wood', '0000154700552', '');
+INSERT INTO `dobavljac` (`DobavljacID`, `Naziv`, `Telefon`, `Email`, `Adresa`, `TekuciRacun`, `Opis`, `Ocjena`) VALUES
+(1, 'Woody', '030111111', 'woody@woody.net', '120 City Wood', '0000154700552', '', '0'),
+(2, 'FurnitureExtra', '033512444', 'fextra@mail.com', 'Haj Huj 120', '0000274712342', 'bez opisa', '0');
 
 -- --------------------------------------------------------
 
@@ -95,11 +97,11 @@ CREATE TABLE IF NOT EXISTS `kupovinaproizvoda` (
 --
 
 INSERT INTO `kupovinaproizvoda` (`KupovinaID`, `NazivKupca`, `Email`, `Telefon`, `DatumKupovine`, `KreiraoNarudzbenicu`) VALUES
-(1, 'John', 'john@jj.com', '+387622238422', '2016-03-31', 'Enzio Enzio'),
-(2, 'Emazetti', 'john@emazetti.com', '+38765555414', '2016-03-31', 'John Johny'),
-(3, 'Ben', 'ben@mail.com', '+38761314123', '2016-04-14', 'John Johny'),
-(4, 'Haris', 'haris@nesto.com', '+38761233123', '2016-04-09', 'Emily'),
-(5, 'Adna', 'adna@mail.com', '+387563131424', '2016-04-22', 'Emily');
+(1, 'John', 'john@jj.com', '+387622238422', '2016-04-30', 'Enzio Enzio'),
+(2, 'Emazetti', 'john@emazetti.com', '+38765555414', '2016-04-30', 'John Johny'),
+(3, 'Ben', 'ben@mail.com', '+38761314123', '2016-05-04', 'John Johny'),
+(4, 'Haris', 'haris@nesto.com', '+38761233123', '2016-05-02', 'Emily'),
+(5, 'Adna', 'adna@mail.com', '+387563131424', '2016-05-03', 'Emily');
 
 -- --------------------------------------------------------
 
@@ -210,7 +212,7 @@ CREATE TABLE IF NOT EXISTS `skladisteproizvoda` (
 INSERT INTO `skladisteproizvoda` (`ProizvodID`, `Naziv`, `Kolicina`, `Cijena`, `Opis`, `Slika`, `DatumAzuriranja`, `Azurirao`) VALUES
 (1, 'Radni stol Libelle', 124, 100, 'Proizvođač: TVILUM SCANBIRK A/S, Ege Alle'' 2, Faaarvang, Danska', '8.jpg', '2016-03-29 00:00:00', 1),
 (2, 'Krevet Wiking', 512, 230, 'Proizvođač: FLEXA4DREAMS - THUKA, Hornsyld Industivej 4, 8783 Hornsyld, Danska', '7.jpg', '2016-03-14 00:00:00', 1),
-(3, 'Vitrina Olympus', 0, 435, 'Proizvođač: Zhejiang Henglin Chair Industry Co., Ltd., 3Block, Sunlight Industry Zone, Anji County, Zhejiang', '9.jpg', '2016-03-16 00:00:00', 1),
+(3, 'Vitrina Olympus', 10, 435, 'Proizvođač: Zhejiang Henglin Chair Industry Co., Ltd., 3Block, Sunlight Industry Zone, Anji County, Zhejiang', '9.jpg', '2016-03-16 00:00:00', 1),
 (4, 'Police Basics', 77, 419.99, 'Proizvođač: TVILUM SCANBIRK A/S, Ege Alle'' 2, Faaarvang, Danska\n\n\n', '6.jpg', '2016-03-15 00:00:00', 1),
 (5, 'Stolić Rocco', 120, 49.99, 'Proizvođač: BAZHOU ZHONGBO TOUGHENED GLASS PRODUCT CO.,LTD Zhongxing Industryzone Dongduan, Langfang City, Kina', '5.jpg', '2015-11-17 00:00:00', 1);
 
@@ -262,6 +264,29 @@ INSERT INTO `tipmenadzera` (`TipID`, `Naziv`, `Plata`) VALUES
 (1, 'menadzer prodaje', 1800),
 (2, 'menadzer nabavke', 2000);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ugovor`
+--
+
+CREATE TABLE IF NOT EXISTS `ugovor` (
+  `UgovorID` int(11) NOT NULL AUTO_INCREMENT,
+  `DobavljacID` int(11) NOT NULL,
+  `Path` varchar(255) COLLATE utf8_slovenian_ci NOT NULL,
+  PRIMARY KEY (`UgovorID`),
+  UNIQUE KEY `Path` (`Path`),
+  KEY `DobavljacID` (`DobavljacID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_slovenian_ci AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `ugovor`
+--
+
+INSERT INTO `ugovor` (`UgovorID`, `DobavljacID`, `Path`) VALUES
+(1, 1, 'ugovori/samplecontract.pdf'),
+(2, 2, 'ugovori/ugovorpr.pdf');
+
 --
 -- Constraints for dumped tables
 --
@@ -311,6 +336,12 @@ ALTER TABLE `skladisteproizvoda`
 --
 ALTER TABLE `skladistesirovina`
   ADD CONSTRAINT `skladistesirovina_ibfk_1` FOREIGN KEY (`Azurirao`) REFERENCES `menadzer` (`MenadzerID`) ON DELETE NO ACTION;
+
+--
+-- Constraints for table `ugovor`
+--
+ALTER TABLE `ugovor`
+  ADD CONSTRAINT `ugovor_ibfk_1` FOREIGN KEY (`DobavljacID`) REFERENCES `dobavljac` (`DobavljacID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
