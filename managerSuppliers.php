@@ -119,7 +119,7 @@
                 <td data-title="Email"><?php echo $u["Email"]?></td>
                 <td data-title="Adresa"><?php echo $u["Adresa"]?></td>
                 <td data-title="TekuciRacun"><?php echo $u["TekuciRacun"]?></td>
-                <td data-title="Ugovor"><a href='<?php echo $u["Path"]?>'>ugovor</a></td>
+                <td data-title="Ugovor"><a href='<?php echo $u["Path"];?>' target='_blank'>Prikaži ugovor</a></td>
               </tr>
         <?php
           }
