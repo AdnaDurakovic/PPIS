@@ -83,7 +83,7 @@
 
   $db = InitBase();
 
-  $statement = $db->prepare("SELECT a.DobavljacID, a.Naziv, a.Telefon, a.Email, a.Adresa, a.TekuciRacun, b.Path FROM dobavljac a,
+  $statement = $db->prepare("SELECT a.DobavljacID, a.Naziv, a.Telefon, a.Email, a.Adresa, a.TekuciRacun, a.Ocjena, b.Path FROM dobavljac a,
   ugovor b WHERE a.DobavljacID = b.DobavljacID");
   $statement->execute();
  ?>
@@ -104,21 +104,34 @@
           <th>Email</th>
           <th>Adresa</th>
           <th>Tekuci racun</th>
+          <th>Rang</th>
           <th>Ugovor</th>
         </tr>
       </thead>
       <tbody>
         <?php
+          $rang = "";
           while ($u = $statement->fetch(PDO::FETCH_ASSOC))
           {
+            if ($u["Ocjena"]<=3 && $u["Ocjena"]>=1)
+              $rang = "USLOVNI DOBAVLJAČ";
+            else if ($u["Ocjena"]<=7 && $u["Ocjena"]>=4)
+              $rang = "APPROVED DOBAVLJAČ";
+            else if ($u["Ocjena"]<=10 && $u["Ocjena"]>=8)
+              $rang = "POUZDAN DOBAVLJAČ";
+            else
+              $rang = "NIJE EVALUIRAN";
         ?>
               <tr>
                 <td data-title="ID"><?php echo $u["DobavljacID"]?></td>
-                <td data-title="Naziv"><?php echo $u["Naziv"]?></td>
+                <?php
+                print '<td data-title="Naziv"><a href="evaluateSupplier.php?suppId='.urldecode($u["DobavljacID"]).'&suppName='.urldecode($u["Naziv"]).'">'.$u["Naziv"].'</a></td>'
+                ?>
                 <td data-title="Telefon"><?php echo $u["Telefon"]?></td>
                 <td data-title="Email"><?php echo $u["Email"]?></td>
                 <td data-title="Adresa"><?php echo $u["Adresa"]?></td>
                 <td data-title="TekuciRacun"><?php echo $u["TekuciRacun"]?></td>
+                <td data-title="Rang"><?php echo $rang?></td>
                 <td data-title="Ugovor"><a href='<?php echo $u["Path"];?>' target='_blank'>Prikaži ugovor</a></td>
               </tr>
         <?php

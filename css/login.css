@@ -179,6 +179,17 @@ input:focus ~ .highlight {
 	padding: 5px 30px;
 }
 
+.dummyy {
+	background: transparent;
+	border: 0;
+	margin: .6em 0 1em 0;
+	position: relative;
+	display: inline-block;
+	height: 30px;
+	width: 300px;
+	padding: 5px 30px;
+}
+
 .buttonBluee a {
 	text-decoration: none;
 	color: #fff;

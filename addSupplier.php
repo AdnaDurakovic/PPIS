@@ -14,7 +14,7 @@ if (isset ($_REQUEST["dodavanje"])) {
     $tel = $_REQUEST["telefon"];
     $adresa = $_REQUEST["adresa"];
     $racun = $_REQUEST["racun"];
-    $ocjena = intval($_REQUEST["ocjena"]);
+    //$ocjena = intval($_REQUEST["ocjena"]);
     $opis = $_REQUEST["opis"];
 
 
@@ -34,14 +34,14 @@ if (isset ($_REQUEST["dodavanje"])) {
 
         #sada dodajemo dobavljaca u tabelu, da iskoristimo njegov ID kao ime ugovora (unikatno, zar ne? :D)
         $b = InitBase();
-        $u = $b->prepare("INSERT INTO dobavljac (Naziv, Telefon, Email, Adresa, TekuciRacun, Opis, Ocjena) VALUES (:d, :t, :e, :a, :r, :op, :oc)");
+        $u = $b->prepare("INSERT INTO dobavljac (Naziv, Telefon, Email, Adresa, TekuciRacun, Opis) VALUES (:d, :t, :e, :a, :r, :op)");
         $u->bindParam(":d", $dobavljac);
         $u->bindParam(":t", $tel);
         $u->bindParam(":e", $email);
         $u->bindParam(":a", $adresa);
         $u->bindParam(":r", $racun);
         $u->bindParam(":op", $opis);
-        $u->bindParam(":oc", $ocjena);
+        //$u->bindParam(":oc", $ocjena);
         $u->execute();
         if (!$u) {
             echo "{\"status\":\"NotOK\",\"message\":\"Došlo je do greške prilikom konektovanja na bazu!\"}";
@@ -61,7 +61,7 @@ if (isset ($_REQUEST["dodavanje"])) {
                 echo "{\"status\":\"NotOK\",\"message\":\"Došlo je do greške prilikom konektovanja na bazu (ne radi ubacivanje ugovora u bazu)!\"}";
                 exit (6);
             }
-            echo "{\"status\":\"OK\"}";
+            //echo "{\"status\":\"OK\"}";
 
             $oki = true;
         } else {
@@ -86,7 +86,7 @@ if (isset ($_REQUEST["dodavanje"])) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Shop | Woody</title>
+    <title>Add Supplier | Woody</title>
 
     <link href="css/style.css" rel="stylesheet">
 
@@ -96,6 +96,7 @@ if (isset ($_REQUEST["dodavanje"])) {
     <!-- Custom CSS -->
     <link href="css/shop-homepage.css" rel="stylesheet">
     <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/addSupplier.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -148,9 +149,6 @@ exit (16);
                 </li>
                 <li>
                     <a href="#">Contact</a>
-                </li>
-                <li>
-                    <div class="dummy"></div>
                 </li>
                 <li>
 
@@ -238,7 +236,7 @@ exit (16);
                     </div>
                 </div>
 
-                <!-- Text input-->
+                <!-- Text input
                 <div class="form-group">
                     <label class="col-md-5 control-label" for="ocjena">Ocjena</label>
                     <div class="col-md-5">

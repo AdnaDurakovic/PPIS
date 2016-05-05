@@ -1,0 +1,29 @@
+.select_join {
+  width: 90%;
+  height: 28px;
+  overflow: hidden;
+  border: #FEFEFE 2px solid;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0px 0px 10px 1px #FEFEFE;
+  box-shadow: inset 0px 0px 10px 1px #FEFEFE;
+}
+
+.select_bla {
+  width: 90%;
+}
+
+.select_join select {
+  background: transparent;
+  width: auto;
+  font-size:12pt;
+  color:grey;
+  border: 0;
+  border-radius: 0;
+  height: 28px;
+  -webkit-appearance: none;
+}
+
+.select_join select:focus {
+  outline: none;
+}
