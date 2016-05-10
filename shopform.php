@@ -1,37 +1,48 @@
-<?php
-error_reporting(E_ALL);
-session_start();
-require "base.php";
-
-$db = InitBase();
-if (isset ($_REQUEST["kupovina"]))
-{
-    $kupac = $_REQUEST["kupac"];
-    $email = $_REQUEST["email"];
-    $tel = $_REQUEST["telefon"];
-    $naruzba = $_REQUEST["narudzba"];
-    $b = InitBase();
-    $u = $b->prepare("INSERT INTO kupovinaproizvoda (NazivKupca, Email, Telefon, DatumKupovine, KreiraoNarudzbenicu) VALUES (:k, :e, :t, NOW(), :n)");
-    $u->bindParam(":k", $kupac);
-    $u->bindParam(":e", $email);
-    $u->bindParam(":t", $tel);
-    $u->bindParam(":n", $naruzba);
-    $u->execute();
-
-    if (!$u)
-    {
-        echo "{\"status\":\"NotOK\",\"message\":\"Došlo je do greške prilikom konektovanja na bazu!\"}";
-        exit (2);
-    }
-    echo "{\"status\":\"OK\"}";
-    exit (0);
-
-}
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
+
+<?php
+    error_reporting(E_ALL);
+    session_start();
+    require "base.php";
+
+    $db = InitBase();
+    if (isset ($_REQUEST["kupovina"]))
+    {
+        var_dump($_REQUEST["kupovina"]);
+
+        $kupac = $_REQUEST["kupac"];
+        $email = $_REQUEST["email"];
+        $tel = $_REQUEST["telefon"];
+        $naruzba = $_REQUEST["narudzba"];
+        
+        $b = InitBase();
+        
+        $u = $b->prepare("INSERT INTO kupovinaproizvoda (NazivKupca, Email, Telefon, DatumKupovine, KreiraoNarudzbenicu) VALUES (:k, :e, :t, NOW(), :n)");
+        $u->bindParam(":k", $kupac);
+        $u->bindParam(":e", $email);
+        $u->bindParam(":t", $tel);
+        $u->bindParam(":n", $naruzba);
+        $u->execute();
+
+        // $sql = 'select * from kupovinaproizvoda';// order by KupovinaID LIMIT 1';
+        // $id = 0;
+        // foreach ($b->query($sql) as $row) {
+        //     $id = $row['KupovinaID'];
+        // }
+
+        $b = InitBase();
+
+        $u = $b->prepare("insert into kupovina (KupovinaID, ProizvodID, Kolicina) values (431, 3, 2)");
+        // $u->bindParam(":i", "431");
+        // $u->bindParam(":p", 3);
+        // $u->bindParam(":k", 2);
+        $u->execute();
+
+
+    }
+?>
+
 
 <head>
 

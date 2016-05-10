@@ -121,13 +121,15 @@ $nazivp = "debil";
                     <h5>Korpa<br>_____________________________</h5>
                     <table style="width:100%">
                     <?php
-                    if (isset($_GET['nazivp'])&&isset($_GET['cijenap'])) {
+                    if (isset($_GET['nazivp'])&&isset($_GET['cijenap'])&&isset($_GET['id'])) {
                       $nazivp = $_GET['nazivp'];
                       $cijenap = $_GET['cijenap'];
+                      $id = $_GET['id'];
                       $total = $total + $cijenap;
 
                       $_SESSION["nazivi"][$ukupno] = $nazivp;
                       $_SESSION["cijene"][$ukupno] = $cijenap;
+                      $_SESSION["ids"][$ukupno] = $id;
 
                       $ukupno = $ukupno + 1;
 
@@ -222,7 +224,7 @@ $nazivp = "debil";
                                     </div>
                                 </div>
                                 <p id="dodajbtn">
-                                    <a href="shop.php?nazivp=<?php echo $u["Naziv"]?>&cijenap=<?php echo $u["Cijena"]?>" class="btn btn-primary">Dodaj</a>
+                                    <a href="shop.php?nazivp=<?php echo $u["Naziv"]?>&cijenap=<?php echo $u["Cijena"]?>&id=<?=$u['ProizvodID']?>" class="btn btn-primary">Dodaj</a>
                                 </p>
                             </div>
 
