@@ -142,9 +142,6 @@ exit (16);
                     <a href="#">About</a>
                 </li>
                 <li>
-                    <a href="shop.php">Shop</a>
-                </li>
-                <li>
                     <a href="managerSuppliers.php">Manager | Suppliers</a>
                 </li>
                 <li>

@@ -11,7 +11,7 @@
   $db = InitBase();
 
   // Determine whether an account exists matching this username and password
-  $stmt = $db->prepare("SELECT MenadzerID FROM menadzer WHERE Username = :username AND Password = :password");
+  $stmt = $db->prepare("SELECT Tip FROM menadzer WHERE Username = :username AND Password = :password");
 
   // Bind the input parameters to the prepared statement
   $stmt->bindParam(':username', $username, PDO::PARAM_STR);
@@ -26,7 +26,8 @@
   if ($number_of_rows == 1) {
 
   // Bind the returned user ID to the $id variable
-  $id = $stmt->fetchColumn();
+  $tip = $stmt->fetchColumn();
+
 
 
   session_start();
@@ -34,7 +35,10 @@
   $_SESSION['username'] = $username;
 
   // Redirect the user to the home page
-  header('Location: managerPanel.php');
+  if ($tip == 1)
+    header('Location: managerPanel.php');
+  else if ($tip == 2)
+    header('Location: managerPanelReq.php');
 }
 else {
   //print_r($stmt->fetchColumn());

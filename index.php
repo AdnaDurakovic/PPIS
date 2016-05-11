@@ -1,6 +1,9 @@
 <?php
 require "base.php";
 
+session_start();
+session_destroy();
+
 $db = InitBase();
 
 $statement = $db->prepare("SELECT Naziv,Cijena,Slika,Opis FROM skladisteproizvoda");
