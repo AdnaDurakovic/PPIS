@@ -164,7 +164,15 @@ $nazivp = "debil";
                     </table>
                     <br>
                     <p>
-                        <a href="shopform.php" class="btn btn-primary">Kupi</a>
+                    <?php
+                    $txtides = "";
+                    if (isset($_SESSION["ids"])) {
+                    	$ides = json_encode($_SESSION["ids"]);
+                    	$txtides = urlencode($ides);
+                    }
+                    	print '<a href="shopform.php?ids='.$txtides.'" class="btn btn-primary">Kupi</a>';
+
+                    ?> 
                     </p>
                 </div>
             </div>

@@ -1,51 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <?php
+	require "base.php";
     error_reporting(E_ALL);
     session_start();
-    require "base.php";
+    session_destroy();
+    
+	if(isset($_REQUEST['ids']))
+	{
+	    $Text = urldecode($_REQUEST['ids']);
+		$ides = json_decode($Text);
 
-    $db = InitBase();
+		$max = 0;
+		foreach ($ides as &$i) {
+		   if ($i>$max)
+		   	$max=$i;
+		}
+
+		$kolicina = array_fill(1, $max, 0);
+		foreach ($ides as &$id) {
+		   $kolicina[$id] = $kolicina[$id]+1;
+		}
+	}
+	
+	
     if (isset ($_REQUEST["kupovina"]))
     {
-        var_dump($_REQUEST["kupovina"]);
+    	$b = InitBase();
 
+        var_dump($_REQUEST["kupovina"]);
         $kupac = $_REQUEST["kupac"];
         $email = $_REQUEST["email"];
         $tel = $_REQUEST["telefon"];
         $naruzba = $_REQUEST["narudzba"];
         
-        $b = InitBase();
         
+
         $u = $b->prepare("INSERT INTO kupovinaproizvoda (NazivKupca, Email, Telefon, DatumKupovine, KreiraoNarudzbenicu) VALUES (:k, :e, :t, NOW(), :n)");
         $u->bindParam(":k", $kupac);
         $u->bindParam(":e", $email);
         $u->bindParam(":t", $tel);
         $u->bindParam(":n", $naruzba);
         $u->execute();
+		
 
-        // $sql = 'select * from kupovinaproizvoda';// order by KupovinaID LIMIT 1';
-        // $id = 0;
-        // foreach ($b->query($sql) as $row) {
-        //     $id = $row['KupovinaID'];
-        // }
+        if ($u) 
+        {
+        	/*
+        	echo '<script language="javascript">';
+			echo 'alert("Uspješan prvi insert!")';
+			echo '</script>';
+			*/
 
-        $b = InitBase();
+        	$q = $b->prepare("SELECT KupovinaID FROM kupovinaproizvoda ORDER BY KupovinaID DESC LIMIT 1");
+			$q->execute();
+			$id = $q->fetch();
 
-        $u = $b->prepare("insert into kupovina (KupovinaID, ProizvodID, Kolicina) values (431, 3, 2)");
-        // $u->bindParam(":i", "431");
-        // $u->bindParam(":p", 3);
-        // $u->bindParam(":k", 2);
-        $u->execute();
-
-
+			if($q)
+	    	{
+	    		$pid = 1;
+		        foreach ($kolicina as &$kol) {
+		        	if ($kol != 0) {
+			        	$v = $b->prepare("INSERT INTO kupovina (ProizvodID, KupovinaID, Kolicina) VALUES (:p, :i, :k)");
+				        $v->bindParam(":p", $pid);
+				        $v->bindParam(":i", $id[0]);
+				        $v->bindParam(":k", $kol);
+				        $v->execute();
+		        	}
+		        	$pid = $pid+1;
+		        } 
+			}
+        }
     }
+	
 ?>
 
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -122,9 +154,8 @@
 
     <!-- Page Content -->
     <div class="container">
-
         <div class="col-md-9 frmwidth">
-                <form class="form-horizontal" id="kupovina">
+                <form class="form-horizontal" id="shop">
                     <input type="hidden" name="kupovina" value="1">
                     <fieldset>
 
