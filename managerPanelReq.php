@@ -115,7 +115,7 @@
           <th>Naziv proizvoda</th>
           <th>Kupljeno (artikala)</th>
           <th>Kupac</th>
-          <th>Stanje</th>
+          <!--<th>Stanje</th>-->
 
         </tr>
       </thead>
@@ -136,7 +136,7 @@
             $nazivp = $p['Naziv'];
             $kolicinap = $p['Kolicina'];
         }
-
+/*
         $stanje = "";
         if ($kolicinap > $kol) {
           $stanje = "NA STANJU";
@@ -146,7 +146,7 @@
           $razlika = $kol - $kolicinap;
           $stanje = "POTREBNO ".$razlika." ARTIKALA";
         }
-
+*/
         $s = $db->prepare($sql3);
         $s->bindParam(":kid", $kid);
         $s->execute();
@@ -174,9 +174,9 @@
             <td data-title="Email"><?php echo $email;?></td>
       <td data-title="Telefon"><?php echo $telefon;?></td>
       <td data-title="Datum kupovine"><?php echo $datum;?></td>
-      -->
+      
             <td data-title="Stanje">(<?php echo $kolicinap;?>)&nbsp<?php echo $stanje;?></td>
-
+-->
             </tr>
             <?php 
             } 
@@ -193,6 +193,9 @@
     $stmt->execute();
   ?>
 
+  <br>
+  <h1>Procjena narudžbi</h1>
+  <br>
   <!-- Responsive table starts here -->
   <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
   <div class="table-responsive-vertical shadow-z-1">
@@ -201,9 +204,9 @@
       <thead>
         <tr>
           <th>Naziv proizvoda</th>
-          <th>Kupljeno (artikala)</th>
+          <th>Ukupno kupljeno artikala</th>
           <th>Stanje u skladištu</th>
-          <th>Potrebno</th>
+          <th>Potrebno napraviti</th>
 
         </tr>
       </thead>
