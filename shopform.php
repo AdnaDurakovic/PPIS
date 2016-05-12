@@ -12,8 +12,8 @@
 	{
 	    $Text = urldecode($_REQUEST['ids']);
 		$ides = json_decode($Text);
-		echo "ides=";
-		var_dump($ides);
+		//echo "ides=";
+		//var_dump($ides);
 	}
 
 	$max = 1;
@@ -22,8 +22,8 @@
 		   if ($i>$max)
 		   	$max=$i;
 		}
-		echo "max=";
-		var_dump($max);
+		//echo "max=";
+		//var_dump($max);
 	}
 	
 	$kolicina = array_fill(1, $max, 0);
@@ -31,16 +31,19 @@
 		foreach ($ides as &$id) {
 		   $kolicina[$id] = $kolicina[$id]+1;
 		}
-		echo "kolicina=";
-		var_dump($kolicina);
+		//echo "kolicina=";
+		//var_dump($kolicina);
 	}
-	
+
+	//$data=serialize($kolicina); 
+	//$encoded=htmlentities($data);
+	$encoded = implode(',', $kolicina);
 	
 	
     if (isset ($_REQUEST["kupovina"]))
     {
-    	echo "kolicina nakon kupovine=";
-    	var_dump($kolicina);
+    	//echo "kolicina nakon kupovine=";
+    	//var_dump($kolicina);
 
     	$b = InitBase();
 
@@ -80,16 +83,19 @@
 
 
 	    		$pid = 1;
-	    		//if (isset($kolicina)) {
-	    			foreach ($kolicina as &$kol) {
+	    		if (isset($_REQUEST['kolicina'])) {
+	    			//$koldata = unserialize(stripslashes($_REQUEST['kolicina']));
+	    			$koldata =  explode(',', $_REQUEST['kolicina']);
+	    			//var_dump($koldata);
+	    			foreach ($koldata as &$kol) {
 			        	if ($kol != 0) {
 				        	$v = $db->prepare("INSERT INTO kupovina (ProizvodID, KupovinaID, Kolicina) VALUES (:p, :i, :k)");
-					        $v->bindParam(":p", intval($pid));
-					        $v->bindParam(":i", intval($id[0]));
-					        $v->bindParam(":k", intval($kol));
+					        $v->bindParam(":p", $pid);
+					        $v->bindParam(":i", $id[0]);
+					        $v->bindParam(":k", $kol);
 					        $v->execute();
 
-					        if ($v=false) {
+					        if ($v==false) {
 					        	echo '<script language="javascript">';
 								echo 'alert('.$v->errorCode().')';
 								echo '</script>';
@@ -97,7 +103,7 @@
 			        	}
 			        	$pid = $pid+1;
 			        }
-	    		//}
+	    		}
 		         
 			//}
         //}
@@ -185,6 +191,9 @@
         <div class="col-md-9 frmwidth">
                 <form class="form-horizontal" id="shop">
                     <input type="hidden" name="kupovina" value="1">
+                    <?php
+                    echo '<input type="hidden" name="kolicina" value="'.$encoded.'">';
+                    ?>
                     <fieldset>
 
                         <!-- Form Name -->
