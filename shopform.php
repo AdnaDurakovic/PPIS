@@ -176,8 +176,16 @@
                         <div class="dummy"></div>
                     </li>
                     <li>
-                        <button type="button" class="buttonBluee"> <a href="login.php">Login</a>
-                        </button>
+                      <?php session_start(); ?>
+
+	                  <?php if (isset($_SESSION['username'])) { ?>
+	                  <p>Welcome back, <?= $_SESSION['username']; ?>!</p>
+	                  <button type="button" class="buttonBluee"  onclick="location.href = 'logout.php';">Logout</button>
+	                  <?php } else { ?>
+
+	                  <button type="button" class="buttonBluee"  onclick="location.href = 'login.php';">Login</button>
+
+	                  <?php } ?>
                     </li>
                 </ul>
             </div>
