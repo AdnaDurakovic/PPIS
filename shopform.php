@@ -12,25 +12,39 @@
 	{
 	    $Text = urldecode($_REQUEST['ids']);
 		$ides = json_decode($Text);
+		echo "ides=";
+		var_dump($ides);
+	}
 
-		$max = 0;
+	$max = 1;
+	if (isset($ides)) {
 		foreach ($ides as &$i) {
 		   if ($i>$max)
 		   	$max=$i;
 		}
-
-		$kolicina = array_fill(1, $max, 0);
+		echo "max=";
+		var_dump($max);
+	}
+	
+	$kolicina = array_fill(1, $max, 0);
+	if (isset($ides)) {
 		foreach ($ides as &$id) {
 		   $kolicina[$id] = $kolicina[$id]+1;
 		}
+		echo "kolicina=";
+		var_dump($kolicina);
 	}
+	
 	
 	
     if (isset ($_REQUEST["kupovina"]))
     {
+    	echo "kolicina nakon kupovine=";
+    	var_dump($kolicina);
+
     	$b = InitBase();
 
-        var_dump($_REQUEST["kupovina"]);
+        //var_dump($_REQUEST["kupovina"]);
         $kupac = $_REQUEST["kupac"];
         $email = $_REQUEST["email"];
         $tel = $_REQUEST["telefon"];
@@ -46,8 +60,8 @@
         $u->execute();
 		
 
-        if ($u) 
-        {
+        //if ($u) 
+        //{
         	/*
         	echo '<script language="javascript">';
 			echo 'alert("Uspješan prvi insert!")';
@@ -58,21 +72,35 @@
 			$q->execute();
 			$id = $q->fetch();
 
-			if($q)
-	    	{
+			//var_dump($id[0]);
+
+			//if($q)
+	    	//{
+	    		$db = InitBase();
+
+
 	    		$pid = 1;
-		        foreach ($kolicina as &$kol) {
-		        	if ($kol != 0) {
-			        	$v = $b->prepare("INSERT INTO kupovina (ProizvodID, KupovinaID, Kolicina) VALUES (:p, :i, :k)");
-				        $v->bindParam(":p", $pid);
-				        $v->bindParam(":i", $id[0]);
-				        $v->bindParam(":k", $kol);
-				        $v->execute();
-		        	}
-		        	$pid = $pid+1;
-		        } 
-			}
-        }
+	    		//if (isset($kolicina)) {
+	    			foreach ($kolicina as &$kol) {
+			        	if ($kol != 0) {
+				        	$v = $db->prepare("INSERT INTO kupovina (ProizvodID, KupovinaID, Kolicina) VALUES (:p, :i, :k)");
+					        $v->bindParam(":p", intval($pid));
+					        $v->bindParam(":i", intval($id[0]));
+					        $v->bindParam(":k", intval($kol));
+					        $v->execute();
+
+					        if ($v=false) {
+					        	echo '<script language="javascript">';
+								echo 'alert('.$v->errorCode().')';
+								echo '</script>';
+					        }				        
+			        	}
+			        	$pid = $pid+1;
+			        }
+	    		//}
+		         
+			//}
+        //}
     }
 	
 ?>
