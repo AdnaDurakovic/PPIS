@@ -38,10 +38,10 @@
                       <a href="managerPanelReq.php">Zahtjevi za kupovinom</a>
                   </li>
                   <li>
-                      <!-- <a href="sendEmail.php">Email</a> -->
+                      <!--<a href="evaluateArticles.php">Pregled stanja</a>-->
                   </li>
 
-				<!--jer mi je mrsko css -->
+        <!--jer mi je mrsko css -->
                   <li>
                   <a href=""></a>
                   </li>
@@ -121,62 +121,110 @@
       </thead>
       <tbody>
           
-          	<?php
-			while ($u = $statement->fetch(PDO::FETCH_ASSOC))
-			{
-				$kid = $u['KupovinaID'];
-				$pid = $u['ProizvodID'];
-				$kol = $u['Kolicina'];
+            <?php
+      while ($u = $statement->fetch(PDO::FETCH_ASSOC))
+      {
+        $kid = $u['KupovinaID'];
+        $pid = $u['ProizvodID'];
+        $kol = $u['Kolicina'];
 
-				$q = $db->prepare($sql2);
-				$q->bindParam(":pid", $pid);
-				$q->execute();
-				$proizvodi = $q->fetchAll(PDO::FETCH_ASSOC);
-				foreach ($proizvodi as $p) {
-				    $nazivp = $p['Naziv'];
-				    $kolicinap = $p['Kolicina'];
-				}
+        $q = $db->prepare($sql2);
+        $q->bindParam(":pid", $pid);
+        $q->execute();
+        $proizvodi = $q->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($proizvodi as $p) {
+            $nazivp = $p['Naziv'];
+            $kolicinap = $p['Kolicina'];
+        }
 
-				$stanje = "";
-				if ($kolicinap > $kol) {
-					$stanje = "NA STANJU";
-				}
-				else
-				{
-					$razlika = $kol - $kolicinap;
-					$stanje = "POTREBNO ".$razlika." ARTIKALA";
-				}
+        $stanje = "";
+        if ($kolicinap > $kol) {
+          $stanje = "NA STANJU";
+        }
+        else
+        {
+          $razlika = $kol - $kolicinap;
+          $stanje = "POTREBNO ".$razlika." ARTIKALA";
+        }
 
-				$s = $db->prepare($sql3);
-				$s->bindParam(":kid", $kid);
-				$s->execute();
-				
-				$kupacdata = $s->fetchAll(PDO::FETCH_ASSOC);
-				foreach ($kupacdata as $k) {
+        $s = $db->prepare($sql3);
+        $s->bindParam(":kid", $kid);
+        $s->execute();
+        
+        $kupacdata = $s->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($kupacdata as $k) {
 
-				    $kupac = $k['NazivKupca'];
-				    /*
-				    $email = $k['Email'];
-				    $telefon = $k['Telefon'];
-				    $datum = $k['DatumKupovine'];
-				    */
-				}
-				
-			?>
-			<tr> 
-			
+            $kupac = $k['NazivKupca'];
+            /*
+            $email = $k['Email'];
+            $telefon = $k['Telefon'];
+            $datum = $k['DatumKupovine'];
+            */
+        }
+        
+      ?>
+      <tr> 
+      
             <td data-title="Naziv"><?php echo $nazivp;?></td>
             <td data-title="Kupljeno"><?php echo $kol;?></td>
             <?php
-				print '<td data-title="Kupac"><a href="shopDetails.php?kupovinaId='.urldecode($kid).'">'.$kupac.'</a></td>'
-			?>
+        print '<td data-title="Kupac"><a href="shopDetails.php?kupovinaId='.urldecode($kid).'">'.$kupac.'</a></td>'
+      ?>
             <!--
             <td data-title="Email"><?php echo $email;?></td>
-			<td data-title="Telefon"><?php echo $telefon;?></td>
-			<td data-title="Datum kupovine"><?php echo $datum;?></td>
-			-->
+      <td data-title="Telefon"><?php echo $telefon;?></td>
+      <td data-title="Datum kupovine"><?php echo $datum;?></td>
+      -->
             <td data-title="Stanje">(<?php echo $kolicinap;?>)&nbsp<?php echo $stanje;?></td>
 
+            </tr>
+            <?php 
+            } 
+            ?>
+          
+      </tbody>
+    </table>
+  </div>
+
+<?php
+    $sql = "SELECT p.Naziv, Sum(k.Kolicina) Ukupno, p.Kolicina FROM kupovina k, skladisteproizvoda p WHERE p.ProizvodID=k.ProizvodID GROUP BY p.Naziv";
+    $b = InitBase();
+    $stmt = $b->prepare($sql);
+    $stmt->execute();
+  ?>
+
+  <!-- Responsive table starts here -->
+  <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
+  <div class="table-responsive-vertical shadow-z-1">
+  <!-- Table starts here -->
+  <table id="table" class="table table-hover table-mc-light-blue">
+      <thead>
+        <tr>
+          <th>Naziv proizvoda</th>
+          <th>Kupljeno (artikala)</th>
+          <th>Stanje u skladištu</th>
+          <th>Potrebno</th>
+
+        </tr>
+      </thead>
+      <tbody>
+          
+            <?php
+      while ($a = $stmt->fetch(PDO::FETCH_ASSOC))
+      {
+        $nazivproizvoda = $a['Naziv'];
+        $ukupno = $a['Ukupno'];
+        $uskladistu = $a['Kolicina'];
+        $naruciti = 0;
+        if ($uskladistu < $ukupno) {
+          $naruciti = $ukupno - $uskladistu;
+        }
+      ?>
+      <tr> 
+            <td data-title="Naziv"><?php echo $nazivproizvoda;?></td>
+            <td data-title="Ukupno prodato"><?php echo $ukupno;?></td>
+            <td data-title="Stanje u skladištu"><?php echo $uskladistu;?>
+            <td data-title="Potrebno"><?php echo $naruciti;?>
             </tr>
             <?php 
             } 
