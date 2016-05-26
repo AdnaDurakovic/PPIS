@@ -15,21 +15,44 @@
 		//echo "ides=";
 		//var_dump($ides);
 	}
+    if(isset($_REQUEST['kols']))
+    {
+        $Txt = urldecode($_REQUEST['kols']);
+        $kols = json_decode($Txt);
+        //echo "ides=";
+        //var_dump($kols);
+    }
 
+    
 	$max = 1;
 	if (isset($ides)) {
-		foreach ($ides as &$i) {
-		   if ($i>$max)
-		   	$max=$i;
-		}
+		//foreach ($ides as &$i) {
+		//   if ($i>$max)
+		//   	$max=$i;
+		//}
 		//echo "max=";
 		//var_dump($max);
+        $max = count($ides);
 	}
+
+
+    $ideovii = array_fill(1, $max, 0);
+    if (isset($ides)) {
+        $x = 1;
+        foreach ($ides as &$i) {
+           $ideovii[$x] = $i;
+           $x++;
+        }
+        //echo "max=";
+        //var_dump($max);
+    }
 	
 	$kolicina = array_fill(1, $max, 0);
-	if (isset($ides)) {
-		foreach ($ides as &$id) {
-		   $kolicina[$id] = $kolicina[$id]+1;
+	if (isset($kols)) {
+        $x = 1;
+		foreach ($kols as &$k) {
+		   $kolicina[$x] = $k;
+           $x++;
 		}
 		//echo "kolicina=";
 		//var_dump($kolicina);
@@ -38,8 +61,11 @@
 	//$data=serialize($kolicina); 
 	//$encoded=htmlentities($data);
 	$encoded = implode(',', $kolicina);
+    $encoded_ides = implode(',',$ideovii);
 	
-	
+	//$encoded = implode(',', $kols);
+    //var_dump($encoded);
+
     if (isset ($_REQUEST["kupovina"]))
     {
     	//echo "kolicina nakon kupovine=";
@@ -82,15 +108,21 @@
 	    		$db = InitBase();
 
 
-	    		$pid = 1;
-	    		if (isset($_REQUEST['kolicina'])) {
+	    		
+	    		if (isset($_REQUEST['kolicina'])&&isset($_REQUEST['ideovi'])) {
 	    			//$koldata = unserialize(stripslashes($_REQUEST['kolicina']));
-	    			$koldata =  explode(',', $_REQUEST['kolicina']);
+	    			$koldata =  explode(",",$_REQUEST['kolicina']);
+                    $iddata = explode(",", $_REQUEST['ideovi']);
 	    			//var_dump($koldata);
-	    			foreach ($koldata as &$kol) {
-			        	if ($kol != 0) {
+                    //var_dump($iddata);
+                    $pid = 0;
+	    			foreach ($koldata as $kol) {
+                        //echo '<script language="javascript">';
+                        //echo 'alert("dobro je")';
+                        //echo '</script>';
+			        	if ($kol != 0) { 
 				        	$v = $db->prepare("INSERT INTO kupovina (ProizvodID, KupovinaID, Kolicina) VALUES (:p, :i, :k)");
-					        $v->bindParam(":p", $pid);
+					        $v->bindParam(":p", $iddata[$pid]);
 					        $v->bindParam(":i", $id[0]);
 					        $v->bindParam(":k", $kol);
 					        $v->execute();
@@ -99,9 +131,15 @@
 					        	echo '<script language="javascript">';
 								echo 'alert('.$v->errorCode().')';
 								echo '</script>';
-					        }				        
+					        }	
+                            else {
+                                //echo '<script language="javascript">';
+                                //echo 'alert("dobro je :P")';
+                                //echo '</script>';
+                            }
 			        	}
-			        	$pid = $pid+1;
+                        $pid++; 
+			        	
 			        }
 	    		}
 		         
@@ -117,6 +155,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+        <link rel="icon" href="favicon.ico">
+
 
     <title>Shop | Woody</title>
 
@@ -201,6 +241,7 @@
                     <input type="hidden" name="kupovina" value="1">
                     <?php
                     echo '<input type="hidden" name="kolicina" value="'.$encoded.'">';
+                    echo '<input type="hidden" name="ideovi" value="'.$encoded_ides.'">';
                     ?>
                     <fieldset>
 

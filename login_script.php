@@ -41,7 +41,8 @@
     header('Location: managerPanelReq.php');
 }
 else {
-  //print_r($stmt->fetchColumn());
+  header("Location: login_error.php");
+  die();
 }
 
 ?>

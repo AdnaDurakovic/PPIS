@@ -36,6 +36,8 @@
 
 <head>
     <meta charset="utf-8">
+    <link rel="icon" href="favicon.ico">
+
 
     <title>ManagerPanel | Woody</title>
 
@@ -185,7 +187,7 @@
 
 
 <?php
-  $kapacitetSkladista = 1000;
+  $kapacitetSkladista = 10000;
 
   $query = "SELECT Sum(Kolicina) 'Kolicina' FROM skladisteproizvoda";
 
@@ -193,7 +195,9 @@
   $statement->execute();
 
   $u = $statement->fetch(PDO::FETCH_ASSOC);
-  $zauzeto = $u['Kolicina']/10;
+
+
+  $zauzeto = ($u['Kolicina']/$kapacitetSkladista)*100;
 ?>
 <br>
 <br>
@@ -204,13 +208,6 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
 
 </body>
 

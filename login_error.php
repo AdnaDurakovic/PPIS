@@ -85,7 +85,6 @@
   #errorLogin {
     color: red;
     font-size: 12px;
-    display: none;
   }
   </style>
 

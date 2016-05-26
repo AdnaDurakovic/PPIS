@@ -22,6 +22,8 @@ $statement->execute();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
 
     <title>Home | Woody</title>
 
@@ -100,10 +102,9 @@ $statement->execute();
 
     <!-- Jumbotron Header -->
     <header class="jumbotron hero-spacer">
-        <h1>A Warm Welcome!</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
-        <p><a class="btn btn-primary btn-large">Call to action!</a>
-        </p>
+        <h1>Woody furniture</h1>
+        <p>Helping people do their best wherever they work, learn, heal, and live</p>
+
     </header>
 
     <hr>

@@ -38,6 +38,7 @@ $nazivp = "debil";
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
 
     <title>Shop | Woody</title>
 
@@ -46,7 +47,7 @@ $nazivp = "debil";
 
     <!-- Custom CSS -->
     <link href="css/shop-homepage.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/login.css">
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -54,6 +55,54 @@ $nazivp = "debil";
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style type="text/css">
+    .senpai {
+        width: auto;
+    }
+    .buttonBlue {
+      background: #4a89dc;
+      text-shadow: 1px 1px 0 rgba(39, 110, 204, .5);
+      float: right;
+    }
+    .buttonBluee a {
+    text-decoration: none;
+    color: #fff;
+    }
+
+    .buttonBluee {
+        background: #4a89dc;
+        border: 0;
+        -webkit-font-smoothing: antialiased;
+        border-bottom: 2px solid #3160B6;
+        text-align: center;
+        letter-spacing: 1px;
+        vertical-align: middle;
+        color: #fff;
+        margin: .7em 0 1em 0;
+        text-shadow: 1px 1px 0 rgba(39, 110, 204, .5);
+        position: relative;
+        display: inline-block;
+        font-size: 14px;
+        line-height: 20px;
+        height: 30px;
+        width: 100%;
+        padding: 5px 30px;
+    }
+
+    .buttonBlue,.buttonBluee:hover { background: #357bd8; }
+
+    .dummy {
+        background: transparent;
+        border: 0;
+        margin: .6em 0 1em 0;
+        position: relative;
+        display: inline-block;
+        height: 30px;
+        width: 700px;
+        padding: 5px 30px;
+    }
+
+    </style>
 
 </head>
 
@@ -111,38 +160,37 @@ $nazivp = "debil";
 
             <div class="col-md-3">
                 <p class="lead"></p>
-                <div class="list-group">
-                    <a href="#" class="list-group-item">Category 1</a>
-                    <a href="#" class="list-group-item">Category 2</a>
-                    <a href="#" class="list-group-item">Category 3</a>
-                </div>
 
                 <div class="list-group-item">
                     <h5>Korpa<br>_____________________________</h5>
                     <table style="width:100%">
                     <?php
-                    if (isset($_GET['nazivp'])&&isset($_GET['cijenap'])&&isset($_GET['id'])) {
+                    
+                    if (isset($_GET['nazivp'])&&isset($_GET['cijenap'])&&isset($_GET['idp'])&&isset($_GET['bla'])) {
                       $nazivp = $_GET['nazivp'];
                       $cijenap = $_GET['cijenap'];
-                      $id = $_GET['id'];
-                      $total = $total + $cijenap;
+                      $id = $_GET['idp'];
+                      $kol = $_GET['kolicinap'];
+                      $total = $total + $cijenap*$kol;
 
                       $_SESSION["nazivi"][$ukupno] = $nazivp;
                       $_SESSION["cijene"][$ukupno] = $cijenap;
                       $_SESSION["ids"][$ukupno] = $id;
+                      $_SESSION["kolicine"][$ukupno] = $kol;
 
                       $ukupno = $ukupno + 1;
 
                       $_SESSION["ukupno"] = $ukupno;
                       $_SESSION["total"] = $total;
+                    ?>
 
-
+                    <?php
                     if (isset($_SESSION["nazivi"])) {
 
                     for ($k=0; $k < $ukupno; $k++) { ?>
 
                        <tr>
-                        <td><?php echo $_SESSION["nazivi"][$k]; ?></td>
+                        <td><?php echo $_SESSION["nazivi"][$k].'&nbsp&nbsp&nbsp&nbspx'.$_SESSION["kolicine"][$k]; ?></td>
                         <td align="right"><?php echo $_SESSION["cijene"][$k]; ?>KM</td>
                        </tr>
 
@@ -150,6 +198,7 @@ $nazivp = "debil";
                     }
                     }
                   }
+                
 
                     ?>
                     </table>
@@ -170,7 +219,12 @@ $nazivp = "debil";
                     	$ides = json_encode($_SESSION["ids"]);
                     	$txtides = urlencode($ides);
                     }
-                    	print '<a href="shopform.php?ids='.$txtides.'" class="btn btn-primary">Kupi</a>';
+                    $txtkols = "";
+                    if (isset($_SESSION["kolicine"])) {
+                        $kols = json_encode($_SESSION["kolicine"]);
+                        $txtkols = urlencode($kols);
+                    }
+                    	print '<a href="shopform.php?ids='.$txtides.'&kols='.$txtkols.'" class="btn btn-primary">Kupi</a>';
 
                     ?> 
                     </p>
@@ -211,17 +265,16 @@ $nazivp = "debil";
                     </div>
 
                 </div>
-
+                
                 <div class="row">
 
                     <?php
                     while ($u = $statement->fetch(PDO::FETCH_ASSOC))
                     {
                         ?>
-
-
                         <div class="col-sm-4 col-lg-4 col-md-4">
                             <div class="thumbnail">
+                            
                                 <img src="pics/<?php echo $u["Slika"]?>" alt="">
                                 <h4 class="pull-right"><?php echo $u["Cijena"]?> KM</h4>
                                 <h4><a href="#"><?php echo $u["Naziv"]?></a>
@@ -231,9 +284,17 @@ $nazivp = "debil";
                                       <p><?php echo $u["Opis"]?></p>
                                     </div>
                                 </div>
+                                <form action="shop.php" method="get" id="senpai" name="senpai">
+                                <input id="kolicinap" name="kolicinap" type="number" value="0"/> 
+                                <input id="nazivp" name="nazivp" type="hidden" value="<?php echo $u["Naziv"]?>"> 
+                                <input id="idp" name="idp" type="hidden" value="<?php echo $u["ProizvodID"]?>"> 
+                                <input id="cijenap" name="cijenap" type="hidden" value="<?php echo $u["Cijena"]?>"> 
+                                <input id="bla" name="bla" type="hidden" value="1"> 
+                                <!--<script type='text/javascript'>function getKol() {return document.getElementById('koll');}</script>-->
                                 <p id="dodajbtn">
-                                    <a href="shop.php?nazivp=<?php echo $u["Naziv"]?>&cijenap=<?php echo $u["Cijena"]?>&id=<?=$u['ProizvodID']?>" class="btn btn-primary">Dodaj</a>
+                                    <input type="submit" class="btn btn-primary" value="Dodaj">
                                 </p>
+                                </form>
                             </div>
 
                         </div>

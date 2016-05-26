@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="utf-8">
+    <link rel="icon" href="favicon.ico">
+
 
     <title>ManagerPanel | Woody</title>
 
